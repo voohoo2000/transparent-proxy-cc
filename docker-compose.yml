@@ -1,0 +1,17 @@
+services:
+  transparent-proxy:
+    build: .
+    container_name: transparent-proxy-cc
+    network_mode: host
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    environment:
+      MODE: ${MODE:-lan-gateway}
+      UPSTREAM_PROXY_HOST: ${UPSTREAM_PROXY_HOST:?set UPSTREAM_PROXY_HOST}
+      UPSTREAM_PROXY_PORT: ${UPSTREAM_PROXY_PORT:?set UPSTREAM_PROXY_PORT}
+      LISTEN_PORT: ${LISTEN_PORT:-12345}
+      LAN_INTERFACE: ${LAN_INTERFACE:-eth0}
+      EXCLUDE_CIDRS: ${EXCLUDE_CIDRS:-10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,127.0.0.0/8}
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+    restart: unless-stopped
